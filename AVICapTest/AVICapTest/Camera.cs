@@ -114,31 +114,30 @@ namespace AVICapTest
         private const int WsVisible = 0x10000000;
 
         private const int WmCapEditCopy = 0x41E;
-        //private const int WmCapSetOverlay = 0x433;
+        //private const integer WmCapSetOverlay = 0x433;
 
         private readonly List<UpnpCaptureDriver> _devices = new List<UpnpCaptureDriver>(10);
         private int _deviceHandle;
         private UpnpCaptureDriver _currentDevice;
         
-
         public Camera()
         {
-            //Get device details using the interop and add each device to the devices list.
+            //Get device details
             for (byte i = 0; i < _devices.Capacity; i++)
             {
-                string deviceName = null;
-                string deviceVersion = null;
+                string deviceName = "".PadLeft(80);
+                string deviceVersion = "".PadLeft(80);
 
-                if (!capGetDriverDescription(i, ref deviceName, 80, ref deviceVersion, 80)) 
+                if (!capGetDriverDescription(i,ref deviceName, 80, ref deviceVersion, 80)) 
                     continue;
                 
                 UpnpCaptureDriver device = new UpnpCaptureDriver
                     {
                         DeviceIndex = i,
-                        Name = deviceName,
-                        Version = deviceVersion
+                        Name = deviceName.Trim('\0'),
+                        Version = deviceVersion.Trim('\0')
                     };
-                _devices.Add(device);
+                _devices.Add(device); 
             }
         }
 
@@ -199,7 +198,6 @@ namespace AVICapTest
             {
                 return (Bitmap)Clipboard.GetData(DataFormats.Bitmap);
             }
-
             return null;
         }
 
@@ -208,9 +206,47 @@ namespace AVICapTest
             get { return _devices; }
         }
 
-        public Bitmap Scale(Control control, Image file)
+        [MTAThread]
+        public static int[] GetPixelLocation(Bitmap bitmap, Color color, int range)
         {
-            SolidBrush brush = new SolidBrush(Color.Black);
+            int maxRed = color.R + range;
+            int minRed = color.R - range;
+            int maxGreen = color.G + range;
+            int minGreen = color.G - range;
+            int maxBlue = color.B + range;
+            int minBlue = color.B - range;
+
+            List<int> column = new List<int>(4);
+            List<int> rows = new List<int>(4);
+
+            for (int x = 0; x < bitmap.Width; x++)
+            {
+                for (int y = 0; y < bitmap.Height; y++)
+                {
+                    Color pixel = bitmap.GetPixel(x, y);
+
+                    if (pixel.R <= minRed || pixel.R >= maxRed || pixel.G <= minGreen || pixel.G >= maxGreen ||
+                        pixel.B <= minBlue || pixel.B >= maxBlue) continue;
+
+                    column.Add(x);
+                    rows.Add(y);
+
+                    if (column.Count > 5)
+                    {
+                        return new[]
+                        {
+                            column[0], rows[0], column[1], rows[1] ,
+                            column[2], rows[2],column[3], rows[3]
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        [MTAThread]
+        public static Bitmap Scale(Control control, Image file)
+        {
             Bitmap image = new Bitmap(file);
 
             float width = GetControlWidth(control);
@@ -220,17 +256,17 @@ namespace AVICapTest
             int scaleWidth = (int)(image.Width * scale);
             int scaleHeight = (int)(image.Height * scale);
 
-            var bmp = new Bitmap((int) width, (int)height);
-            var graph = Graphics.FromImage(bmp);
+            Bitmap bmp = new Bitmap((int) width, (int)height);
+            Graphics graph = Graphics.FromImage(bmp);
             
-            graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
-            graph.DrawImage(image, new Rectangle((int) ((width - scaleWidth) / 2), (int) ((height - scaleHeight) / 2), scaleWidth, scaleHeight));
+            //graph.FillRectangle(brush, new RectangleF(0, 0, width, height));
+            graph.DrawImage(image, new Rectangle((int) ((width - scaleWidth) / 2), 
+                (int) ((height - scaleHeight) / 2), scaleWidth, scaleHeight));
             return bmp;
         }
 
         #region delegates
-
-        private int GetControlHeight(Control control)
+        private static int GetControlHeight(Control control)
         {
             int height = 0;
             if (control.InvokeRequired)
@@ -239,7 +275,7 @@ namespace AVICapTest
             return height;
         }
 
-        private int GetControlWidth(Control control)
+        private static int GetControlWidth(Control control)
         {
             int width = 0;
             if (control.InvokeRequired)
@@ -248,7 +284,7 @@ namespace AVICapTest
             return width;
         }
 
-        private int GetControlHandle(Control control)
+        private static int GetControlHandle(Control control)
         {
             int handle = 0;
             if (control.InvokeRequired)

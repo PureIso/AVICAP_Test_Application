@@ -29,88 +29,126 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.startButton = new System.Windows.Forms.Button();
+            this.stopButton = new System.Windows.Forms.Button();
+            this.capturePictureBox = new System.Windows.Forms.PictureBox();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.button3 = new System.Windows.Forms.Button();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            this.captureFrameButton = new System.Windows.Forms.Button();
+            this.framePictureBox = new System.Windows.Forms.PictureBox();
+            this.recordButton = new System.Windows.Forms.Button();
+            this.stopRecordButton = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.capturePictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.framePictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // button1
+            // startButton
             // 
-            this.button1.Location = new System.Drawing.Point(13, 13);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Start";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.startButton.Location = new System.Drawing.Point(13, 13);
+            this.startButton.Name = "startButton";
+            this.startButton.Size = new System.Drawing.Size(75, 23);
+            this.startButton.TabIndex = 0;
+            this.startButton.Text = "Start";
+            this.startButton.UseVisualStyleBackColor = true;
+            this.startButton.Click += new System.EventHandler(this.StartButtonClick);
             // 
-            // button2
+            // stopButton
             // 
-            this.button2.Location = new System.Drawing.Point(13, 43);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Stop";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.stopButton.Location = new System.Drawing.Point(13, 43);
+            this.stopButton.Name = "stopButton";
+            this.stopButton.Size = new System.Drawing.Size(75, 23);
+            this.stopButton.TabIndex = 1;
+            this.stopButton.Text = "Stop";
+            this.stopButton.UseVisualStyleBackColor = true;
+            this.stopButton.Click += new System.EventHandler(this.StopButtonClick);
             // 
-            // pictureBox1
+            // capturePictureBox
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(140, 13);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(273, 227);
-            this.pictureBox1.TabIndex = 2;
-            this.pictureBox1.TabStop = false;
+            this.capturePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.capturePictureBox.Location = new System.Drawing.Point(140, 13);
+            this.capturePictureBox.Name = "capturePictureBox";
+            this.capturePictureBox.Size = new System.Drawing.Size(273, 227);
+            this.capturePictureBox.TabIndex = 2;
+            this.capturePictureBox.TabStop = false;
             // 
-            // button3
+            // timer1
             // 
-            this.button3.Location = new System.Drawing.Point(12, 72);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(75, 23);
-            this.button3.TabIndex = 5;
-            this.button3.Text = "Capture";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 10;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // pictureBox2
+            // captureFrameButton
             // 
-            this.pictureBox2.Location = new System.Drawing.Point(428, 12);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(273, 227);
-            this.pictureBox2.TabIndex = 6;
-            this.pictureBox2.TabStop = false;
+            this.captureFrameButton.Location = new System.Drawing.Point(13, 72);
+            this.captureFrameButton.Name = "captureFrameButton";
+            this.captureFrameButton.Size = new System.Drawing.Size(75, 23);
+            this.captureFrameButton.TabIndex = 5;
+            this.captureFrameButton.Text = "Capture";
+            this.captureFrameButton.UseVisualStyleBackColor = true;
+            this.captureFrameButton.Click += new System.EventHandler(this.CaptureButtonClick);
+            // 
+            // framePictureBox
+            // 
+            this.framePictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.framePictureBox.Location = new System.Drawing.Point(419, 13);
+            this.framePictureBox.Name = "framePictureBox";
+            this.framePictureBox.Size = new System.Drawing.Size(273, 227);
+            this.framePictureBox.TabIndex = 8;
+            this.framePictureBox.TabStop = false;
+            this.framePictureBox.Paint += new System.Windows.Forms.PaintEventHandler(this.FramePictureBoxPaint);
+            this.framePictureBox.MouseClick += new System.Windows.Forms.MouseEventHandler(this.FramePictureBoxMouseClick);
+            this.framePictureBox.MouseLeave += new System.EventHandler(this.FramePictureBoxMouseLeave);
+            this.framePictureBox.MouseMove += new System.Windows.Forms.MouseEventHandler(this.FramePictureBoxMouseMove);
+            // 
+            // recordButton
+            // 
+            this.recordButton.Location = new System.Drawing.Point(13, 137);
+            this.recordButton.Name = "recordButton";
+            this.recordButton.Size = new System.Drawing.Size(75, 23);
+            this.recordButton.TabIndex = 9;
+            this.recordButton.Text = "Record";
+            this.recordButton.UseVisualStyleBackColor = true;
+            this.recordButton.Click += new System.EventHandler(this.RecordButtonClick);
+            // 
+            // stopRecordButton
+            // 
+            this.stopRecordButton.Location = new System.Drawing.Point(13, 166);
+            this.stopRecordButton.Name = "stopRecordButton";
+            this.stopRecordButton.Size = new System.Drawing.Size(75, 23);
+            this.stopRecordButton.TabIndex = 10;
+            this.stopRecordButton.Text = "Stop Record";
+            this.stopRecordButton.UseVisualStyleBackColor = true;
+            this.stopRecordButton.Click += new System.EventHandler(this.StopRecordButtonClick);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(714, 259);
-            this.Controls.Add(this.pictureBox2);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.ClientSize = new System.Drawing.Size(707, 269);
+            this.Controls.Add(this.stopRecordButton);
+            this.Controls.Add(this.recordButton);
+            this.Controls.Add(this.framePictureBox);
+            this.Controls.Add(this.captureFrameButton);
+            this.Controls.Add(this.capturePictureBox);
+            this.Controls.Add(this.stopButton);
+            this.Controls.Add(this.startButton);
             this.Name = "Form1";
             this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.capturePictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.framePictureBox)).EndInit();
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Button startButton;
+        private System.Windows.Forms.Button stopButton;
+        private System.Windows.Forms.PictureBox capturePictureBox;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Button captureFrameButton;
+        private System.Windows.Forms.PictureBox framePictureBox;
+        private System.Windows.Forms.Button recordButton;
+        private System.Windows.Forms.Button stopRecordButton;
     }
 }
 
